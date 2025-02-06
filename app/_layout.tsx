@@ -1,39 +1,46 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
+// app/_layout.js
+import React from 'react';
 import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { AuthProvider, useAuth } from './AuthContext'; // Adjust path as needed
+import { Redirect } from 'expo-router';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+}
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
+function ProtectedRoute({ children }: ProtectedRouteProps) {
+  const { user } = useAuth();
 
-  if (!loaded) {
-    return null;
+  if (!user) {
+    // Redirect to login if not authenticated
+    return <Redirect href={{pathname: "./components/Login"}} />;
   }
 
+  return children;
+}
+export default function RootLayout() {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <SafeAreaProvider>
+      <AuthProvider>
+        <Stack>
+          <Stack.Screen name="index" options={{ title: 'Home' }} />
+          <Stack.Screen name="signup" options={{ title: 'Sign Up' }} />
+          <Stack.Screen name="login" options={{ title: 'Login' }} />
+          <Stack.Screen name="admin-dashboard" options={{ title: 'Admin Dashboard' }} />
+          <Stack.Screen name="employee-dashboard" options={{ title: 'Employee Dashboard' }}/>
+          <Stack.Screen name="user-dashboard" options={{ title: 'User Dashboard' }} />
+          <Stack.Screen name="bar/[barId]" options={{ title: 'Bar Page' }} />
+          <Stack.Screen name="bar/[barId]/manage-employees" options={{ title: 'Manage Employees' }} />
+          <Stack.Screen name="bar/[barId]/manage-queue" options={{ title: 'Manage Queue' }} />
+          <Stack.Screen name="queue/waiting/[barId]" options={{ title: 'Waiting Page' }} />
+          <Stack.Screen name="venue/[barId]" options={{ title: 'Venue Profile' }} />
+          <Stack.Screen name="bar/[barId]/queue" options={{ title: 'Queue Page' }} />
+          <Stack.Screen name="profile" options={{ title: 'Profile' }} />
+        </Stack>
+      </AuthProvider>
+    </SafeAreaProvider>
   );
 }
