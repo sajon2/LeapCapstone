@@ -9,7 +9,7 @@ import {
   ScrollView, // Import ScrollView
 } from 'react-native';
 import { useAuth } from '../AuthContext'; // Correct relative path
-import BottomNavBar from '../Users/BottomNavBar'; // Correct relative path
+import BottomNavBar from './BottomNavBar'; // Correct relative path
 
 const Profile = () => {
   const { user } = useAuth();

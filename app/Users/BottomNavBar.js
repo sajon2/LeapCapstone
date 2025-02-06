@@ -16,11 +16,11 @@ const BottomNavBar = () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={() => router.push({pathname: '/user-dashboard'})}>
+      <TouchableOpacity style={styles.button} onPress={() => router.push({pathname: '/UserDashboard'})}>
         <FontAwesome name="home" size={24} color="white" />
         <Text style={styles.buttonText}>Home</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => router.push({pathname: '/profile'})}>
+      <TouchableOpacity style={styles.button} onPress={() => router.push({pathname: '/Users/profile'})}>
         <FontAwesome name="user" size={24} color="white" />
         <Text style={styles.buttonText}>Profile</Text>
       </TouchableOpacity>
